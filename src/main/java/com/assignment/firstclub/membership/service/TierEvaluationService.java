@@ -53,6 +53,8 @@ public class TierEvaluationService {
         Tier tier = upgrade
                 ? tierService.getNextUpgraded(subscription.getTierId())
                 : tierService.getNextDowngraded(subscription.getTierId());
+
+        subscriptionService.updateTier(subscriptionId, tier.getId());
     }
 
 }

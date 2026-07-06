@@ -41,13 +41,14 @@ public class MembershipManagerService {
         ReentrantLock lock = userLockManager.getLock(request.getUserId());
         lock.lock();
         try {
+            userService.getUser(request.getUserId());
             MembershipPlan plan = planService.get(request.getPlanId());
             Tier tier = tierService.get(request.getTierId());
             subscriptionService.validateNoActiveSubscription(request.getUserId());
             Subscription subscription = mapper.formSubscription(request, plan, tier);
             subscriptionService.create(subscription);
             return mapper.getSubscriptionDetails(subscription, plan.getName(), tier.getTierType());
-        }finally {
+        } finally {
             lock.unlock();
         }
     }

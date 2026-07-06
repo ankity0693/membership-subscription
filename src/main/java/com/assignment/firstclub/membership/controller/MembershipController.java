@@ -10,6 +10,7 @@ import com.assignment.firstclub.membership.model.entity.TierBenefit;
 import com.assignment.firstclub.membership.service.MembershipManagerService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -35,7 +36,7 @@ public class MembershipController {
     @PostMapping("/subscribe")
     @Operation(summary = "Subscribe to a membership plan")
     public ResponseEntity<SubscriptionResponse> subscribe(
-            @RequestBody SubscribeRequest request) throws SubscriptionException {
+            @Valid @RequestBody SubscribeRequest request) throws SubscriptionException {
 
         return ResponseEntity.ok(membershipManagerService.subscribe(request));
     }

@@ -5,6 +5,7 @@ import com.assignment.firstclub.user.model.User;
 import com.assignment.firstclub.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +22,7 @@ public class UserController {
 
     @PostMapping
     @Operation(summary = "Create a user")
-    public ResponseEntity<User> createUser(@RequestBody UserCreateRequest request) {
+    public ResponseEntity<User> createUser(@Valid @RequestBody UserCreateRequest request) {
         return ResponseEntity.ok(userService.createUser(request));
     }
 }

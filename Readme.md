@@ -1,6 +1,6 @@
 # FirstClub Membership System
 
-A Spring Boot REST application that simulates a membership platform similar to Amazon Prime or Swiggy One. The application manages users, membership plans, tiers, benefits, subscriptions, cohorts, and orders. Membership benefits are automatically applied during checkout using a pluggable rule-based strategy engine.
+A membership platform.
 
 ## Features
 

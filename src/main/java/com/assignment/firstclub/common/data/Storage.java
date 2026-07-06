@@ -1,5 +1,6 @@
 package com.assignment.firstclub.common.data;
 
+import com.assignment.firstclub.common.exception.ResourceNotFoundException;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -29,10 +30,15 @@ public class Storage {
         Map<Long, BaseEntity> entities = storage.get(clazz);
 
         if (entities == null) {
-            return null;
+            throw new ResourceNotFoundException(clazz.getSimpleName(), id);
         }
 
-        return (T) entities.get(id);
+        BaseEntity entity = entities.get(id);
+        if (entity == null) {
+            throw new ResourceNotFoundException(clazz.getSimpleName(), id);
+        }
+
+        return (T) entity;
     }
 
     @SuppressWarnings("unchecked")
