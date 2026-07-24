@@ -4,6 +4,7 @@ import com.assignment.firstclub.common.data.Storage;
 import com.assignment.firstclub.membership.dto.request.SubscribeRequest;
 import com.assignment.firstclub.membership.dto.response.MembershipPlanDetails;
 import com.assignment.firstclub.membership.dto.response.SubscriptionResponse;
+import com.assignment.firstclub.membership.exception.SubscriptionException;
 import com.assignment.firstclub.membership.mapper.Mapper;
 import com.assignment.firstclub.membership.service.*;
 import com.assignment.firstclub.membership.model.PlanType;
@@ -44,6 +45,7 @@ public class SubscriptionTest {
         this.userService = new UserService(storage);
         this.benefitService = new BenefitService(storage);
         this.subscriptionService = new SubscriptionService(storage);
+        this.membershipManagerService = new MembershipManagerService(planService, tierService, benefitService, subscriptionService, new Mapper() , userService, new UserLockManager());
 
         setupMembershipPlanTierAndUser();
     }
@@ -56,10 +58,6 @@ public class SubscriptionTest {
         tierService.addTier(TierType.SILVER);
         tierService.addTier(TierType.GOLD);
         tierService.addTier(TierType.PLATINUM);
-
-        userService.createUser(UserCreateRequest.builder().name("JOHN").emailId("john@abc.com").build());
-        userService.createUser(UserCreateRequest.builder().name("RAM").emailId("ram@abc.com").build());
-        userService.createUser(UserCreateRequest.builder().name("JOE").emailId("joe@abc.com").build());
     }
 
     @Test
@@ -81,19 +79,35 @@ public class SubscriptionTest {
                     .tierId(membershipPlanDetails.getTierInfo().getFirst().getTierId())
                     .build();
 
+            //User1 subscribed to Monthly plan
             SubscriptionResponse subscriptionResponse = membershipManagerService.subscribe(request);
             print(subscriptionResponse);
 
+            membershipManagerService.upgradeTier(subscriptionResponse.getSubscriptionId(), 2l);
+
             SubscriptionResponse subscriptionDetails = membershipManagerService.getSubscriptionDetails(user1.getId());
+            print(subscriptionDetails);
 
-//            print(membershipManagerService.upgradeTier(subscriptionDetails.getSubscriptionId()));
+            //User1 cancel subscriptions
+            membershipManagerService.cancelMembership(subscriptionResponse.getSubscriptionId());
 
-            SubscriptionResponse subscriptionDetails2 = membershipManagerService.getSubscriptionDetails(user2.getId());
+            try {
+                SubscriptionResponse subscriptionDetails2 = membershipManagerService.getSubscriptionDetails(user2.getId());
+            } catch (SubscriptionException e) {
+                print(e.getMessage());
+            }
 
-//            print(membershipManagerService.upgradeTier(subscriptionDetails2.getSubscriptionId()));
+            SubscribeRequest request2 = SubscribeRequest.builder()
+                    .userId(user1.getId())
+                    .planId(membershipPlanDetails.getPlans().getFirst().getId())
+                    .tierId(membershipPlanDetails.getTierInfo().getFirst().getTierId())
+                    .build();
+            //User1 subscribed to Monthly plan
+            SubscriptionResponse subscriptionResponse2 = membershipManagerService.subscribe(request2);
+            print(subscriptionResponse2);
 
-            membershipManagerService.cancelMembership(user2.getId());
-            membershipManagerService.getSubscriptionDetails(user2.getId());
+            membershipManagerService.getSubscriptionDetails(user1.getId());
+
 
         } catch (Exception e) {
             print(e);

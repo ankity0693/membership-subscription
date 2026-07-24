@@ -44,6 +44,7 @@ public class Mapper {
                 .expiryDate(subscription.getExpiryDate())
                 .status(subscription.getStatus())
                 .price(subscription.getPrice())
+                .planType(type)
                 .tierDetails(TierBenefitResponse.builder().tierId(subscription.getTierId()).tierType(tierType).build())
                 .build();
     }

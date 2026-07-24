@@ -67,6 +67,10 @@ public class MembershipManagerService {
         subscriptionService.cancelSubscription(subscriptionId);
     }
 
+    public void upgradeTier(Long subscriptionId, Long tierId) {
+        subscriptionService.updateTier(subscriptionId, tierId);
+    }
+
 
     public List<TierBenefit> getBenefits(Long userId, BenefitUseDuring useDuring) throws SubscriptionException {
         return benefitService.getBenefitsForTier(getSubscriptionDetails(userId).getTierDetails().getTierId())

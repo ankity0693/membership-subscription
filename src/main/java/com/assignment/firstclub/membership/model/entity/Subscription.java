@@ -1,6 +1,7 @@
 package com.assignment.firstclub.membership.model.entity;
 
 import com.assignment.firstclub.common.data.BaseEntity;
+import com.assignment.firstclub.membership.model.PlanType;
 import com.assignment.firstclub.membership.model.SubscriptionStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
